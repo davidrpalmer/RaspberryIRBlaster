@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>David Palmer</Authors>
+    <Product>RaspberryIRBlaster</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2020 David Palmer</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RaspberryIRBlaster.Common\RaspberryIRBlaster.Common.csproj" />
+    <ProjectReference Include="..\RaspberryIRDotNet\RaspberryIRDotNet\RaspberryIRDotNet.csproj" />
+  </ItemGroup>
+
+</Project>

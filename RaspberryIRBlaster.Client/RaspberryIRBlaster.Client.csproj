@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>David Palmer</Authors>
+    <Product>RaspberryIRBlaster</Product>
+    <Copyright>Copyright (c) 2020 David Palmer</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Optional library for making requests to the server. Or you can simply make the requests yourself using HTTP.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="106.11.4" />
+  </ItemGroup>
+
+</Project>
