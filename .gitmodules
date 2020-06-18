@@ -1,0 +1,3 @@
+[submodule "RaspberryIRDotNet"]
+	path = RaspberryIRDotNet
+	url = git@github.com:davidrpalmer/RaspberryIRDotNet.git
