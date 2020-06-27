@@ -73,5 +73,18 @@ namespace RaspberryIRBlaster.Client
             var response = _client.Execute(request);
             ThrowIfRequestFailed(response);
         }
+
+        /// <summary>
+        /// Request the server clear the cache of remote profiles so any changes to the JSON files are picked up.
+        /// </summary>
+        public void ClearCache()
+        {
+            var request = _createRequestFunc();
+            request.Method = Method.POST;
+            request.Resource = "Maintenance/ClearCache";
+
+            var response = _client.Execute(request);
+            ThrowIfRequestFailed(response);
+        }
     }
 }
