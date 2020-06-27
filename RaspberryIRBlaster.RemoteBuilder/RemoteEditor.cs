@@ -191,10 +191,6 @@ namespace RaspberryIRBlaster.RemoteBuilder
             Console.WriteLine("  Raw duration");
             Console.WriteLine("  Rounded duration");
             Console.WriteLine("  Number of units");
-            Console.WriteLine("This will run until you any key to stop it.");
-            Console.WriteLine("Press any key to start...");
-            Console.ReadKey(true);
-            Console.WriteLine();
             Console.WriteLine();
             IRRXUtilities.RunIRConsoleWriter(receive);
         }

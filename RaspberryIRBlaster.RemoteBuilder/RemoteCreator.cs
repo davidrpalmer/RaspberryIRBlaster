@@ -16,6 +16,18 @@ namespace RaspberryIRBlaster.RemoteBuilder
 
         public void Create()
         {
+            var remotesDir = _config.GetRemotesDirectory();
+            if (!remotesDir.Exists)
+            {
+                Console.WriteLine("The remotes directory does not exist. It must exist and be writeable.");
+                Console.WriteLine("  Path:" + remotesDir.FullName);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("Press any key to return to the main menu.");
+                Console.ReadKey(true);
+                return;
+            }
+
             var remote = MakeNewRemote();
             FileInfo file = AskForNameToSaveWith();
             if (file == null)
@@ -39,7 +51,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
         {
             Console.WriteLine("Creating a new remote control profile.");
             int unitDuration;
-            RaspberryIRDotNet.PulseSpaceUnitList leadIn;
+            RaspberryIRDotNet.PulseSpaceUnitList leadIn = null;
             if (AskYesNo("Do you know the unit duration and lead-in pattern?"))
             {
                 Console.WriteLine();
@@ -51,12 +63,12 @@ namespace RaspberryIRBlaster.RemoteBuilder
                 Console.WriteLine("OFF. For example if the lead-in pattern is 8 units on, 4 units off, 6 units on,");
                 Console.WriteLine("6 units off then enter that as '8,4,6,6'. A lead-in is typically just one ON/OFF");
                 Console.WriteLine("cycle like '8,4'.");
-                Console.Write(">");
-                string leadInText = Console.ReadLine();
-                leadIn = RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(leadInText);
-                if (leadIn.Count <= 0)
+
+                while (leadIn == null || leadIn.Count <= 0)
                 {
-                    throw new Exception("Need a lead-in.");
+                    Console.Write(">");
+                    string leadInText = Console.ReadLine();
+                    leadIn = RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(leadInText);
                 }
             }
             else

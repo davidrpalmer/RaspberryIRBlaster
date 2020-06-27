@@ -38,7 +38,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
                         var remotes = Config.GetRemotes();
                         if (remotes.Length > 0)
                         {
-                            foreach (var file in Config.GetRemotes())
+                            foreach (var file in remotes)
                             {
                                 Console.WriteLine("  " + file.FullName);
                             }
@@ -118,12 +118,6 @@ namespace RaspberryIRBlaster.RemoteBuilder
                 CaptureDevice = IRRXUtilities.RxDevicePath.Value,
             };
 
-            Console.WriteLine("This will log raw IR PULSE/SPACE data to the console.");
-            Console.WriteLine("This will run until you any key to stop it.");
-            Console.WriteLine("Press any key to start...");
-            Console.ReadKey(true);
-            Console.WriteLine();
-            Console.WriteLine();
             IRRXUtilities.RunIRConsoleWriter(receive);
         }
     }
