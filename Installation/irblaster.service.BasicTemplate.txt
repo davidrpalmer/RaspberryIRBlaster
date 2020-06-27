@@ -1,0 +1,13 @@
+[Unit]
+Description=IR Blaster REST server
+After=network.target
+
+[Service]
+User=nobody
+Group=video
+ExecStart=/usr/local/bin/RaspberryIRBlaster/Server/RaspberryIRBlaster.Server --config=/etc/RaspberryIRBlaster/
+Restart=no
+Type=notify
+
+[Install]
+WantedBy=multi-user.target

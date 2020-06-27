@@ -1,0 +1,48 @@
+[Unit]
+Description=IR Blaster REST server
+After=network.target
+
+[Service]
+User=nobody
+Group=video
+ExecStart=/usr/local/bin/RaspberryIRBlaster/Server/RaspberryIRBlaster.Server --config=/etc/RaspberryIRBlaster/
+Restart=no
+Type=notify
+
+# Sandboxing....
+
+ProtectSystem=strict
+ProtectHome=true
+ProtectClock=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+NoNewPrivileges=true
+RestrictSUIDSGID=true
+PrivateMounts=true
+PrivateTmp=true
+
+InaccessiblePaths=-/mnt/
+InaccessiblePaths=-/media/
+InaccessiblePaths=-/var/
+InaccessiblePaths=-/sys/
+
+TemporaryFileSystem=/etc/:ro
+BindReadOnlyPaths=-/etc/RaspberryIRBlaster/
+
+# Restrict access to all devices, except LIRC devices. May need to add to this depending on the IR device config.
+# Comment out this section to just allow normal device access.
+PrivateDevices=true
+BindPaths=-/dev/lirc0
+DeviceAllow=/dev/lirc0 rw
+BindPaths=-/dev/lirc1
+DeviceAllow=/dev/lirc1 rw
+
+
+# Disable dotnet diagnostics files
+Environment=COMPlus_EnableDiagnostics=0
+
+[Install]
+WantedBy=multi-user.target
+
