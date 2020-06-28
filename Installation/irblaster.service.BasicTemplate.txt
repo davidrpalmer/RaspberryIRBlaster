@@ -9,5 +9,6 @@ ExecStart=/usr/local/bin/RaspberryIRBlaster/Server/RaspberryIRBlaster.Server --c
 Restart=no
 Type=notify
 
-[Install]
-WantedBy=multi-user.target
+# Uncomment this if not using socket activation to enable auto start at system boot.
+#[Install]
+#WantedBy=multi-user.target

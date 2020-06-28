@@ -31,6 +31,10 @@ InaccessiblePaths=-/sys/
 TemporaryFileSystem=/etc/:ro
 BindReadOnlyPaths=-/etc/RaspberryIRBlaster/
 
+# If using socket activation then direct network access is not needed so can be blocked.
+# You may want to comment this out even if using socket activation so that starting the service without the socket still works.
+PrivateNetwork=true
+
 # Restrict access to all devices, except LIRC devices. May need to add to this depending on the IR device config.
 # Comment out this section to just allow normal device access.
 PrivateDevices=true
@@ -43,6 +47,6 @@ DeviceAllow=/dev/lirc1 rw
 # Disable dotnet diagnostics files
 Environment=COMPlus_EnableDiagnostics=0
 
-[Install]
-WantedBy=multi-user.target
-
+# Uncomment this if not using socket activation to enable auto start at system boot.
+#[Install]
+#WantedBy=multi-user.target

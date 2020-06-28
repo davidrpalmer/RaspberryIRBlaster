@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Mono.Posix;
 
 namespace RaspberryIRBlaster.Server
 {
@@ -49,18 +48,23 @@ namespace RaspberryIRBlaster.Server
             string appDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             return Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, config) =>
-                {
-                    // Without this the working directory can affect where appsettings.json is loaded from.
-                    config.SetBasePath(appDir);
-                })
-            .UseSystemd()
-            .UseContentRoot(appDir) // Not using any disk content in this app, but got this incase it is used in the future.
-            .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls(Config.GeneralConfig.ListenAtUrl);
-                });
+                .ConfigureAppConfiguration((context, config) =>
+                    {
+                        // Without this the working directory can affect where appsettings.json is loaded from.
+                        config.SetBasePath(appDir);
+                    })
+                .UseSystemd()
+                .UseContentRoot(appDir) // Not using any disk content in this app, but got this incase it is used in the future.
+                .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        webBuilder.UseStartup<Startup>();
+                        webBuilder.UseLibuv(); // Needed for systemd socket activation to work
+                        webBuilder.ConfigureKestrel(options =>
+                        {
+                            options.UseSystemd();
+                        });
+                        webBuilder.UseUrls(Config.GeneralConfig.ListenAtUrl);
+                    });
         }
     }
 }
