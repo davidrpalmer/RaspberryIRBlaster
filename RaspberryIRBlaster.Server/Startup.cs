@@ -29,6 +29,10 @@ namespace RaspberryIRBlaster.Server
             services.AddControllers(options =>
                 options.Filters.Add(typeof(HttpExceptionFilter)));
 
+            if (Program.Config.GeneralConfig.IdleShutdownMins > 0)
+            {
+                services.AddHostedService<Application.IdleShutdown>();
+            }
             services.AddHostedService<Application.IRTransmitter>();
         }
 
@@ -38,6 +42,20 @@ namespace RaspberryIRBlaster.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            if (Program.Config.GeneralConfig.IdleShutdownMins > 0)
+            {
+                app.Use(async (context, next) =>
+                {
+                    if (Application.IdleShutdown.Instance == null)
+                    {
+                        throw new NullReferenceException("The idle shutdown service does not exist.");
+                    }
+                    Application.IdleShutdown.Instance.Activity();
+
+                    await next();
+                });
             }
 
             app.Use(async (context, next) =>

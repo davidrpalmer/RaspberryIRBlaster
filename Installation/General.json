@@ -2,4 +2,5 @@
   "IRRXDevice": null,
   "IRTXDevice": null,
   "ListenAtUrl": "http://localhost:8000",
+  "IdleShutdownMins": 20,
 }

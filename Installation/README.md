@@ -25,6 +25,7 @@ sudo chmod 775 /etc/RaspberryIRBlaster/Remotes
 Upload the `General.json` file from this directory to `/etc/RaspberryIRBlaster/General.json`. Make any changes you want to make to this file.
  * For `ListenAtUrl` you can use values like `http://*:8000` to listen on all interfaces on port 8000 or you can use `http://localhost:8000` to only listen on the IPv4 and IPv6 loopback addresses. Note this is ignored by the server when using systemd socket activation, but you should still set it since the RemoteBuilder will still use it and so will the server if you start it at the console.
  * The `IRRXDevice` and `IRTXDevice` parameters only need to be specified if you have more than one IR device of a particular type. So if you have one TX and one RX device you can leave these at null and the application will auto select the device. If however you have multiple transmitters and/or multiple receivers you will need to use a value like `/dev/lirc5`.
+ * The `IdleShutdownMins` parameter can be used to shutdown the application when it is idle of the specified number of minutes - intended to be used with socket activation. Set to zero to disable.
 
 ## systemd
 

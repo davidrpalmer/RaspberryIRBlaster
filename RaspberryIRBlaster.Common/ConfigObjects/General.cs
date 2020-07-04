@@ -18,5 +18,10 @@ namespace RaspberryIRBlaster.Common.ConfigObjects
         /// The URL to listen at. Example: http://*:1234/
         /// </summary>
         public string ListenAtUrl { get; set; }
+
+        /// <summary>
+        /// After how many minutes of inactivity should the server shutdown. Zero to never shutdown.
+        /// </summary>
+        public int IdleShutdownMins { get; set; }
     }
 }
