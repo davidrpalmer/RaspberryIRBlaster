@@ -15,7 +15,7 @@ namespace RaspberryIRBlaster.Server.Controllers
 
         private Application.IRTransmitter GetIRTransmitter()
         {
-            return Program.IRTransmitter;
+            return Application.IRTransmitter.Instance;
         }
 
         public IRTXController(ILogger<IRTXController> logger)

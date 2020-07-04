@@ -28,6 +28,8 @@ namespace RaspberryIRBlaster.Server
         {
             services.AddControllers(options =>
                 options.Filters.Add(typeof(HttpExceptionFilter)));
+
+            services.AddHostedService<Application.IRTransmitter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

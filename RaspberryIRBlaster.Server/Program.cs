@@ -13,8 +13,6 @@ namespace RaspberryIRBlaster.Server
     {
         public static Common.ConfigManager Config { get; private set; }
 
-        public static Application.IRTransmitter IRTransmitter { get; private set; }
-
         private const int ExitCode_BadArgs = 1;
         private const int ExitCode_BadConfig = 2;
 
@@ -38,7 +36,6 @@ namespace RaspberryIRBlaster.Server
             }
 
             var appHost = CreateHostBuilder(args).Build();
-            IRTransmitter = new Application.IRTransmitter(Config, appHost.Services);
             appHost.Run();
             return 0;
         }
@@ -49,22 +46,22 @@ namespace RaspberryIRBlaster.Server
 
             return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
-                    {
-                        // Without this the working directory can affect where appsettings.json is loaded from.
-                        config.SetBasePath(appDir);
-                    })
+                {
+                    // Without this the working directory can affect where appsettings.json is loaded from.
+                    config.SetBasePath(appDir);
+                })
                 .UseSystemd()
                 .UseContentRoot(appDir) // Not using any disk content in this app, but got this incase it is used in the future.
                 .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseLibuv(); // Needed for systemd socket activation to work
+                    webBuilder.ConfigureKestrel(options =>
                     {
-                        webBuilder.UseStartup<Startup>();
-                        webBuilder.UseLibuv(); // Needed for systemd socket activation to work
-                        webBuilder.ConfigureKestrel(options =>
-                        {
-                            options.UseSystemd();
-                        });
-                        webBuilder.UseUrls(Config.GeneralConfig.ListenAtUrl);
+                        options.UseSystemd(); // Use systemd socket activation
                     });
+                    webBuilder.UseUrls(Config.GeneralConfig.ListenAtUrl); // Kestrel ignores this if systemd socket activation is used.
+                });
         }
     }
 }

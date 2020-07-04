@@ -12,6 +12,8 @@ namespace RaspberryIRBlaster.Server.Application
 {
     public class IRTransmitter : IHostedService
     {
+        public static IRTransmitter Instance { get; private set; }
+
         private readonly ILogger<IRTransmitter> _logger;
         private readonly PulseSpaceTransmitter_ManualOpenClose _irInterface = new PulseSpaceTransmitter_ManualOpenClose();
         private readonly object _locker = new object();
@@ -21,29 +23,19 @@ namespace RaspberryIRBlaster.Server.Application
 
         private Task _workerTask;
 
-        public IRTransmitter(Common.ConfigManager configManager, IServiceProvider services)
+        public IRTransmitter(IServiceProvider services)
         {
-            if (configManager == null)
-            {
-                throw new ArgumentNullException(nameof(configManager));
-            }
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
             _logger = services.GetRequiredService<ILogger<IRTransmitter>>();
-            _remoteButtonCache = new RemoteButtonCache(services.GetRequiredService<ILogger<RemoteButtonCache>>(), configManager);
-
-            string irDevice = configManager.GeneralConfig.IRTXDevice;
-            if (string.IsNullOrEmpty(irDevice))
-            {
-                irDevice = new RaspberryIRDotNet.DeviceAssessment.DeviceAssessor().GetPathToTheTransmitterDevice();
-            }
-            _irInterface.TransmissionDevice = irDevice;
-            _logger.LogInformation($"IR transmission device: {irDevice}");
+            _remoteButtonCache = new RemoteButtonCache(services.GetRequiredService<ILogger<RemoteButtonCache>>(), Program.Config);
 
             _actionContext = new ActionContext(this);
+
+            Instance = this;
         }
 
         public void Run(ICollection<IAction> actions)
@@ -119,7 +111,7 @@ namespace RaspberryIRBlaster.Server.Application
             _abort = true;
             lock (_locker)
             {
-                _logger.LogTrace("Got the lock.");
+                _logger.LogTrace("Got the lock for aborting.");
                 if (_workerTask != null && _workerTask.Status < TaskStatus.RanToCompletion)
                 {
                     _workerTask.Wait();
@@ -136,7 +128,16 @@ namespace RaspberryIRBlaster.Server.Application
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Start request.");
+            _logger.LogDebug("Start request.");
+
+            string irDevice = Program.Config.GeneralConfig.IRTXDevice;
+            if (string.IsNullOrEmpty(irDevice))
+            {
+                irDevice = new RaspberryIRDotNet.DeviceAssessment.DeviceAssessor().GetPathToTheTransmitterDevice();
+            }
+            _irInterface.TransmissionDevice = irDevice;
+            _logger.LogInformation($"IR transmission device: {irDevice}");
+
             return Task.CompletedTask;
         }
 
