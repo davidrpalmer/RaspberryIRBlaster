@@ -6,6 +6,7 @@ After=network.target
 User=nobody
 Group=video
 ExecStart=/usr/local/bin/RaspberryIRBlaster/Server/RaspberryIRBlaster.Server --config=/etc/RaspberryIRBlaster/
+WorkingDirectory=/usr/local/bin/RaspberryIRBlaster/Server/
 Restart=no
 Type=notify
 

@@ -33,8 +33,7 @@ namespace RaspberryIRBlaster.Server.Application
 
             lock (_locker)
             {
-                CachedRemote cachedRemote;
-                if (!_cachedButtons.TryGetValue(remoteName, out cachedRemote))
+                if (!_cachedButtons.TryGetValue(remoteName, out var cachedRemote))
                 {
                     _logger.LogDebug($"Remote '{remoteName}' was not in the cache. Trying to load it.");
                     Common.ConfigObjects.Remote remoteConfig;

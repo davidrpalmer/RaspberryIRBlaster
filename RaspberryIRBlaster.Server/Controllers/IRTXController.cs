@@ -29,7 +29,7 @@ namespace RaspberryIRBlaster.Server.Controllers
         [HttpPost]
         public void SendBatch(SendBatchRequestModel data)
         {
-            _logger.LogInformation("Send batch start.");
+            _logger.LogDebug("Send batch start.");
             var actions = new List<Application.Actions.IAction>();
 
             foreach (var item in data.Items)
@@ -99,7 +99,7 @@ namespace RaspberryIRBlaster.Server.Controllers
             }
 
             GetIRTransmitter().Run(actions);
-            _logger.LogInformation("Send batch end.");
+            _logger.LogDebug("Send batch end.");
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace RaspberryIRBlaster.Server.Controllers
         [HttpPost]
         public void Abort()
         {
-            _logger.LogInformation("Abort batch start.");
+            _logger.LogDebug("Abort batch start.");
             GetIRTransmitter().Abort();
-            _logger.LogInformation("Abort batch end.");
+            _logger.LogDebug("Abort batch end.");
         }
     }
 }
