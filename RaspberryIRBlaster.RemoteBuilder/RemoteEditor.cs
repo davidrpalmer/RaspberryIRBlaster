@@ -51,7 +51,6 @@ namespace RaspberryIRBlaster.RemoteBuilder
         {
             Console.WriteLine("Lead In Pattern:    " + string.Join(",", RemoteConfig.LeadIn));
             Console.WriteLine("Minimum Unit Count: " + RemoteConfig.MinimumUnitCount);
-            Console.WriteLine("Maximum Unit Count: " + RemoteConfig.MaximumUnitCount);
             Console.WriteLine("Unit Duration:      " + RemoteConfig.UnitDuration + " microseconds");
             Console.WriteLine("Frequency:          " + RemoteConfig.Frequency + " Hz");
             Console.WriteLine("Duty Cycle:         " + RemoteConfig.DutyCycle + "%");
@@ -159,14 +158,12 @@ namespace RaspberryIRBlaster.RemoteBuilder
 
         private RaspberryIRDotNet.IRPulseMessage LearnButton()
         {
-            var ir = new RaspberryIRDotNet.RX.IRMessageLearn()
+            var ir = new RaspberryIRDotNet.RX.IRMessageLearn(IRRXUtilities.RxDevicePath.Value)
             {
-                CaptureDevice = IRRXUtilities.RxDevicePath.Value,
-                LeadInPattern = RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(RemoteConfig.LeadIn),
-                MessageMinimumUnitCount = RemoteConfig.MinimumUnitCount,
-                MessageMaximumUnitCount = RemoteConfig.MaximumUnitCount,
+                MinimumPulseSpaceCount = RemoteConfig.MinimumUnitCount,
                 UnitDurationMicrosecs = RemoteConfig.UnitDuration,
             };
+            ir.SetLeadInPatternFilterByUnits(RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(RemoteConfig.LeadIn));
 
             IRRXUtilities.SetUpRxFeedback(ir);
             IRRXUtilities.WriteButtonPressInstructions("the button", false);
@@ -176,16 +173,15 @@ namespace RaspberryIRBlaster.RemoteBuilder
 
         private void LogRawIR()
         {
-            var receive = new RaspberryIRDotNet.RX.FilteredPulseSpaceConsoleWriter
+            var receive = new RaspberryIRDotNet.RX.FilteredPulseSpaceConsoleWriter(IRRXUtilities.RxDevicePath.Value)
             {
-                CaptureDevice = IRRXUtilities.RxDevicePath.Value,
-                LeadInPattern = RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(RemoteConfig.LeadIn),
                 UnitDurationMicrosecs = RemoteConfig.UnitDuration,
             };
+            receive.SetLeadInPatternFilterByUnits(RaspberryIRDotNet.PulseSpaceUnitList.LoadFromString(RemoteConfig.LeadIn));
 
             Console.WriteLine("This will log & filter the IR to only what appears to be valid for this remote.");
             Console.WriteLine("The signal is first cleaned up (using the unit duration) then it is filtered by");
-            Console.WriteLine("the lead-in pattern. The min/max unit counts are ignored.");
+            Console.WriteLine("the lead-in pattern. The minimum unit count is ignored.");
             Console.WriteLine("From left to right the columns are:");
             Console.WriteLine("  Type (PULSE / SPACE)");
             Console.WriteLine("  Raw duration");

@@ -11,8 +11,6 @@ namespace RaspberryIRBlaster.Common.ConfigObjects
         public string LeadIn { get; set; }
 
         public int MinimumUnitCount { get; set; } = 0;
-        
-        public int MaximumUnitCount { get; set; } = int.MaxValue;
         #endregion
 
         #region Playback config - stuff we don't need for learning new buttons, but do need to play them back.

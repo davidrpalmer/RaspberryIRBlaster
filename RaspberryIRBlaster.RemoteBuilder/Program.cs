@@ -113,10 +113,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
 
         private static void LogRawIR()
         {
-            var receive = new RaspberryIRDotNet.RX.PulseSpaceConsoleWriter()
-            {
-                CaptureDevice = IRRXUtilities.RxDevicePath.Value,
-            };
+            var receive = new RaspberryIRDotNet.RX.PulseSpaceConsoleWriter(IRRXUtilities.RxDevicePath.Value);
 
             IRRXUtilities.RunIRConsoleWriter(receive);
         }

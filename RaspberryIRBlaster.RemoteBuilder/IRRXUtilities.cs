@@ -46,11 +46,12 @@ namespace RaspberryIRBlaster.RemoteBuilder
             Console.ReadKey(true);
             Console.WriteLine();
             Console.WriteLine();
+            var cancellationToken = new RaspberryIRDotNet.ReadCancellationToken();
             var thread = new System.Threading.Thread(() =>
             {
                 try
                 {
-                    receive.Start();
+                    receive.Start(cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -63,8 +64,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
             thread.Start();
 
             Console.ReadKey(true);
-            receive.StopWhenPossible();
-            thread.Join(TimeSpan.FromSeconds(1)); // Wait a short period for it to either stop or at least complete its current console writing so that it won't be writing to the console while we are off doing other things.
+            cancellationToken.Cancel(wait: true);
             Console.WriteLine("IR logger stopped.");
         }
     }

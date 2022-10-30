@@ -77,10 +77,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
 
                 Console.WriteLine();
 
-                var leadInLearner = new RaspberryIRDotNet.RX.LeadInLearner()
-                {
-                    CaptureDevice = IRRXUtilities.RxDevicePath.Value
-                };
+                var leadInLearner = new RaspberryIRDotNet.RX.LeadInLearner(IRRXUtilities.RxDevicePath.Value);
                 leadInLearner.Received += (s, e) => Console.Write("#");
 
                 Console.WriteLine("This step will try to learn the lead-in pattern that prefixes each IR message.");
@@ -93,9 +90,8 @@ namespace RaspberryIRBlaster.RemoteBuilder
                 Console.WriteLine();
                 Console.WriteLine();
 
-                var unitDurationLearner = new RaspberryIRDotNet.RX.UnitDurationLearner()
+                var unitDurationLearner = new RaspberryIRDotNet.RX.UnitDurationLearner(IRRXUtilities.RxDevicePath.Value)
                 {
-                    CaptureDevice = IRRXUtilities.RxDevicePath.Value,
                     LeadInPatternDurations = leadInDurations,
                 };
                 IRRXUtilities.SetUpRxFeedback(unitDurationLearner);
@@ -117,34 +113,10 @@ namespace RaspberryIRBlaster.RemoteBuilder
                 leadIn = new RaspberryIRDotNet.PulseSpaceUnitList(unitDuration, leadInDurations);
             }
 
-            int minUnits, maxUnits;
-            while (true)
-            {
-                Console.WriteLine("Enter the minimum number of units that an IR message can contain. Any received");
-                Console.WriteLine("IR signals with fewer than this many units will be discarded as noise.");
-                Console.WriteLine("If you don't know what to use then 50 is a good value.");
-                minUnits = AskForInteger(1, 9999);
-                Console.WriteLine();
-                Console.WriteLine("Enter the maximum number of units that an IR message can contain. Any received");
-                Console.WriteLine("IR signals with more than this many units will be discarded as noise.");
-                Console.WriteLine("This can be equal to the minimum if the number of units does not vary.");
-                Console.WriteLine("If you don't know what to use then 200 is a good value.");
-                maxUnits = AskForInteger(1, 9999);
-
-                if (minUnits > maxUnits)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Minimum must be less than or equal to the maximum.");
-                    Console.WriteLine("Try again...");
-                    Console.WriteLine();
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-
+            Console.WriteLine("Enter the minimum number of units that an IR message can contain. Any received");
+            Console.WriteLine("IR signals with fewer than this many units will be discarded as noise.");
+            Console.WriteLine("If you don't know what to use then 50 is a good value.");
+            int minUnits = AskForInteger(1, 9999);
 
             Console.WriteLine();
             Console.WriteLine();
@@ -181,7 +153,6 @@ namespace RaspberryIRBlaster.RemoteBuilder
                 UnitDuration = unitDuration,
                 LeadIn = leadIn.SaveToString(),
                 MinimumUnitCount = minUnits,
-                MaximumUnitCount = maxUnits,
                 DutyCycle = dutyCycle,
                 Frequency = frequency,
                 InterButtonSleepMilliseconds = interButtonSleep,
