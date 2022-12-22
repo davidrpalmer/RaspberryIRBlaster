@@ -20,6 +20,12 @@ namespace RaspberryIRBlaster.Common.ConfigObjects
         public string ListenAtUrl { get; set; }
 
         /// <summary>
+        /// List of origins (e.g. http://192.168.0.3 / http://192.168.0.3:2233) that can access the REST API.
+        /// CORS will be disabled if no domains are specified.
+        /// </summary>
+        public string[] CorsOrigins { get; set; }
+
+        /// <summary>
         /// After how many minutes of inactivity should the server shutdown. Zero to never shutdown.
         /// </summary>
         public int IdleShutdownMins { get; set; }

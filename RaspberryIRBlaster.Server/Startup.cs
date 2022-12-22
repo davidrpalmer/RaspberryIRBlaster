@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 namespace RaspberryIRBlaster.Server
 {
@@ -34,6 +35,20 @@ namespace RaspberryIRBlaster.Server
                 services.AddHostedService<Application.IdleShutdown>();
             }
             services.AddHostedService<Application.IRTransmitter>();
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policyBuilder =>
+                {
+                    if (Program.Config.GeneralConfig.CorsOrigins?.Length > 0)
+                    {
+                        policyBuilder.WithOrigins(Program.Config.GeneralConfig.CorsOrigins);
+                    }
+                    policyBuilder.WithMethods("GET", "POST");
+                    policyBuilder.WithHeaders(HeaderNames.ContentType);
+                    policyBuilder.SetPreflightMaxAge(TimeSpan.FromMinutes(1));
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +88,8 @@ namespace RaspberryIRBlaster.Server
             });
 
             app.UseRouting();
+
+            app.UseCors(); // The call to UseCors must be placed after UseRouting, but before UseAuthorization. https://learn.microsoft.com/en-us/aspnet/core/security/cors
 
             app.UseAuthorization();
 
