@@ -24,7 +24,21 @@ namespace RaspberryIRBlaster.Server.Controllers
         }
 
         /// <summary>
-        /// Send a predefined IR message.
+        /// Send a single predefined IR message.
+        /// </summary>
+        [HttpPost]
+        public void SendMessage([FromBody]string messageName)
+        {
+            _logger.LogDebug("Send single message start.");
+
+            var actions = new Application.Actions.IAction[] { new Application.Actions.SendMessageAction(messageName) };
+            GetIRTransmitter().Run(actions);
+
+            _logger.LogDebug("Send single message end.");
+        }
+
+        /// <summary>
+        /// Send a batch of predefined IR messages.
         /// </summary>
         [HttpPost]
         public void SendBatch(SendBatchRequestModel data)
