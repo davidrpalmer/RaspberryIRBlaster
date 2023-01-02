@@ -3,14 +3,15 @@ Description=IR Blaster REST server
 After=network.target
 
 [Service]
-User=nobody
-Group=video
 ExecStart=/usr/local/bin/RaspberryIRBlaster/Server/RaspberryIRBlaster.Server --config=/etc/RaspberryIRBlaster/
 WorkingDirectory=/usr/local/bin/RaspberryIRBlaster/Server/
 Restart=no
 Type=notify
 
 # Sandboxing....
+
+DynamicUser=true
+SupplementaryGroups=video
 
 ProtectSystem=strict
 ProtectHome=true
