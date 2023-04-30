@@ -5,7 +5,7 @@ There is no client application in this project, however there is a client librar
 
 ## Prerequisites
  * This application uses the [RaspberryIRDotNet](https://github.com/davidrpalmer/RaspberryIRDotNet) library so all the prerequisites of that project also apply here.
- * [ASP.NET Core 3.1 Runtime](https://dotnet.microsoft.com/download/dotnet-core/) installed on the Pi
+ * [ASP.NET 6.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed on the Pi
 
 ## Components
  * `RaspberryIRBlaster.Server` is the ASP.NET server. It can run on the console or as a systemd service.

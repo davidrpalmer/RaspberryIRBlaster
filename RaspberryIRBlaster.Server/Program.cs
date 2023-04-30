@@ -55,7 +55,6 @@ namespace RaspberryIRBlaster.Server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseLibuv(); // Needed for systemd socket activation to work
                     webBuilder.ConfigureKestrel(options =>
                     {
                         options.UseSystemd(); // Use systemd socket activation

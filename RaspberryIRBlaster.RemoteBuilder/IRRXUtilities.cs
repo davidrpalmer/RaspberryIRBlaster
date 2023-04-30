@@ -46,7 +46,7 @@ namespace RaspberryIRBlaster.RemoteBuilder
             Console.ReadKey(true);
             Console.WriteLine();
             Console.WriteLine();
-            var cancellationToken = new RaspberryIRDotNet.ReadCancellationToken();
+            var cancellationToken = new RaspberryIRDotNet.RX.ReadCancellationToken();
             var thread = new System.Threading.Thread(() =>
             {
                 try
