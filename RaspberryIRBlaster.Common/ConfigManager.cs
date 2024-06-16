@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using RaspberryIRBlaster.Common.ConfigObjects;
 
 namespace RaspberryIRBlaster.Common
 {
     public class ConfigManager
     {
-        private static readonly System.Text.Json.JsonSerializerOptions JsonOptions = new System.Text.Json.JsonSerializerOptions()
+        private static readonly System.Text.Json.JsonSerializerOptions _jsonOptions = new()
         {
-            IgnoreNullValues = false,
             WriteIndented = true,
             AllowTrailingCommas = true,
             ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip
@@ -64,10 +63,8 @@ namespace RaspberryIRBlaster.Common
         public void LoadGeneralConfig()
         {
             var file = new FileInfo(_generalConfigFilePath);
-            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                GeneralConfig = System.Text.Json.JsonSerializer.DeserializeAsync<General>(fileStream, JsonOptions).Result;
-            }
+            using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            GeneralConfig = System.Text.Json.JsonSerializer.Deserialize<General>(fileStream, _jsonOptions);
         }
 
         public FileInfo[] GetRemotes()
@@ -91,10 +88,8 @@ namespace RaspberryIRBlaster.Common
 
         public Remote LoadRemote(FileInfo file)
         {
-            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                return System.Text.Json.JsonSerializer.DeserializeAsync<Remote>(fileStream, JsonOptions).Result;
-            }
+            using var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            return System.Text.Json.JsonSerializer.Deserialize<Remote>(fileStream, _jsonOptions);
         }
 
         public FileInfo SaveRemote(Remote remote, string remoteName)
@@ -108,7 +103,7 @@ namespace RaspberryIRBlaster.Common
         {
             using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                System.Text.Json.JsonSerializer.SerializeAsync(fileStream, remote, JsonOptions).Wait();
+                System.Text.Json.JsonSerializer.Serialize(fileStream, remote, _jsonOptions);
             }
             file.Refresh();
         }

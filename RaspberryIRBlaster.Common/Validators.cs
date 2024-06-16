@@ -3,15 +3,16 @@ using System.Text.RegularExpressions;
 
 namespace RaspberryIRBlaster.Common
 {
-    public static class Validators
+    public static partial class Validators
     {
         /// <summary>
         /// Both the remote and button names just so happen to share the same rules.
         /// </summary>
-        private static readonly Regex _remoteAndButtonNameValidator = new Regex(@"^[a-z0-9_\-]{1,30}$", RegexOptions.IgnoreCase);
+        [GeneratedRegex(@"^[a-z0-9_\-]{1,30}$", RegexOptions.IgnoreCase)]
+        private static partial Regex RemoteAndButtonNameValidator();
 
-        public static bool ValidateRemoteName(string name) => _remoteAndButtonNameValidator.IsMatch(name);
+        public static bool ValidateRemoteName(string name) => RemoteAndButtonNameValidator().IsMatch(name);
 
-        public static bool ValidateButtonName(string name) => _remoteAndButtonNameValidator.IsMatch(name);
+        public static bool ValidateButtonName(string name) => RemoteAndButtonNameValidator().IsMatch(name);
     }
 }
