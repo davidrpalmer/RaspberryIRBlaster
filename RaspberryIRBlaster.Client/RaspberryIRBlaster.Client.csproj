@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>David Palmer</Authors>
     <Product>RaspberryIRBlaster</Product>
-    <Copyright>Copyright (c) 2020 David Palmer</Copyright>
+    <Copyright>Copyright (c) 2024 David Palmer</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Optional library for making requests to the server. Or you can simply make the requests yourself using HTTP.</Description>
   </PropertyGroup>
